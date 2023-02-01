@@ -26,20 +26,15 @@ class RowTableOrder(BaseClass):
     __tablename__ = 'Orders'
 
     id = Column(INTEGER, primary_key = True, autoincrement = True)
-    id_user = Column(INTEGER)
+    id_user = Column(INTEGER, ForeignKey("Users.id_Telegram"))
     pickupPoint = Column(TEXT, ForeignKey("Pickup_points.id"))
     dateTime = Column(INTEGER)
     typePay = Column(TEXT)
     status = Column(TEXT)
     # зв'язок з RowTablePickupPoint
-    order_parent = relationship("RowTablePickupPoint", back_populates="order_child", secondary="Order_Users")
-    
-class Order_Users(BaseClass):
-    __tablename__ = 'Order_Users'
-
-    id = Column(INTEGER, primary_key = True, autoincrement = True)
-    id_order = Column(INTEGER, ForeignKey = "Orders.id")
-    id_user = Column(INTEGER, ForeignKey = "Users.id")
+    order_parent = relationship("RowTablePickupPoint", back_populates="order_child")
+    # зв'язок з RowTableUser
+    order_user_parent = relationship("RowTableUser", back_populates="order_user_child")
 
 
 class RowTableUser(BaseClass):
@@ -49,7 +44,12 @@ class RowTableUser(BaseClass):
     role = Column(TEXT, ForeignKey("Roles.id"))
     name = Column(TEXT)
     lastName = Column(TEXT)
-    role_parent = relationship("RowTableRole", back_populates="role_child", secondary="Order_Users")
+    # зв'язок з RowTableRole
+    role_parent = relationship("RowTableRole", back_populates="role_child")
+    # зв'язок з RowTableOrder
+    order_user_child = relationship("RowTableOrder", back_populates="order_user_parent")
+
+
 class RowTableRole(BaseClass):    
     __tablename__ = 'Roles'
 

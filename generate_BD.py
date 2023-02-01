@@ -112,7 +112,6 @@ class Creature_bd:
         db.commit()
     
     # заполнене таблицы RowTableRole для ПРИМЕРА
-    with Session(bdEngine) as db:
         user = RowTableRole(
             name = "User",
             role_child = []
@@ -129,7 +128,6 @@ class Creature_bd:
         db.commit()
     
     # заполнене таблицы RowTableUser для ПРИМЕРА
-    with Session(bdEngine) as db:
         user1 = RowTableUser(
             id_Telegram = randint(1_000_000, 10_000_000),
             role = [],
@@ -140,13 +138,14 @@ class Creature_bd:
         db.commit()
 
     # заполнене таблицы RowTablePickupPoint для ПРИМЕРА
-    with Session(bdEngine) as db:
         place1 = RowTablePickupPoint(
             name = "Ivan",
             lastName = "Shelkovski"
            )  
         db.add_all(user1)
         db.commit()
+
+
 
 
     # функция добавления строки в таблицу Products
