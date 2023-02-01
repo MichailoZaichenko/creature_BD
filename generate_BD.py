@@ -1,8 +1,7 @@
 import sqlalchemy
-from table_patern import BaseClass, RowTableProduct, RowTableOrder, RowTableOrderProduct
-# RowTableRole,  RowTablePickupPoint, RowTableUser,  
+from table_patern import BaseClass, RowTableProduct, RowTableOrder, RowTableOrderProduct,RowTableRole,  RowTablePickupPoint, RowTableUser  
 from sqlalchemy.orm import Session
-
+from random import randint
 class Creature_bd:
     bdEngine = sqlalchemy.create_engine("sqlite:///bot_BD.db")
     bdConection = bdEngine.connect()
@@ -111,8 +110,43 @@ class Creature_bd:
         )
         db.add(row_2)
         db.commit()
+    
+    # заполнене таблицы RowTableRole для ПРИМЕРА
+    with Session(bdEngine) as db:
+        user = RowTableRole(
+            name = "User",
+            role_child = []
+           )    
+        admin = RowTableRole(
+            name = "Admin",
+            role_child = []
+           ) 
+        meneger = RowTableRole(
+            name = "Meneger",
+            role_child = []
+           )  
+        db.add_all(user, admin, meneger)
+        db.commit()
+    
+    # заполнене таблицы RowTableUser для ПРИМЕРА
+    with Session(bdEngine) as db:
+        user1 = RowTableUser(
+            id_Telegram = randint(1_000_000, 10_000_000),
+            role = [],
+            name = "Ivan",
+            lastName = "Shelkovski"
+           )  
+        db.add_all(user1)
+        db.commit()
 
-
+    # заполнене таблицы RowTablePickupPoint для ПРИМЕРА
+    with Session(bdEngine) as db:
+        place1 = RowTablePickupPoint(
+            name = "Ivan",
+            lastName = "Shelkovski"
+           )  
+        db.add_all(user1)
+        db.commit()
 
 
     # функция добавления строки в таблицу Products
