@@ -71,27 +71,27 @@ class Creature_bd:
         # db.commit()
 
     # заполнене таблицы Orders для ПРИМЕРА
-    with Session(bdEngine) as db:
-        row_1 = RowTableOrder(
-            id_user = 1,
-            pickupPoint = 'avenue Dmytro Yavornytsky 100',
-            dateTime = 14,
-            typePay = 'cash',
-            status = 'ready'
-            )
-        db.add(row_1)
-        db.commit()
+    # with Session(bdEngine) as db:
+    #     row_1 = RowTableOrder(
+    #         id_user = 1,
+    #         pickupPoint = 'avenue Dmytro Yavornytsky 100',
+    #         dateTime = 14,
+    #         typePay = 'cash',
+    #         status = 'ready'
+    #         )
+    #     db.add(row_1)
+    #     db.commit()
 
-        row_2 = RowTableOrder(
-            id_user = 2,
-            pickupPoint = 'avenue Dmytro Yavornytsky 50',
-            dateTime = 13,
-            typePay = 'cash',
-            status = 'wait'
-            )
-        db.add(row_2)
-        db.commit()
-
+    #     row_2 = RowTableOrder(
+    #         id_user = 2,
+    #         pickupPoint = 'avenue Dmytro Yavornytsky 50',
+    #         dateTime = 13,
+    #         typePay = 'cash',
+    #         status = 'wait'
+    #         )
+    #     db.add(row_2)
+    #     db.commit()
+        
     # заполнене таблицы Orders-Products для ПРИМЕРА
     with Session(bdEngine) as db:
         pr = RowTableProduct( name = "Burger2",
@@ -114,7 +114,13 @@ class Creature_bd:
             name = "Sholochova 56",
             coordinats = 45.234
            )  
-        db.add_all(place1)
+        db.add(place1)
+        db.commit()
+        place2 = RowTablePickupPoint(
+            name = "Minicha 56",
+            coordinats = 76.234
+           )  
+        db.add(place1)
         db.commit()
 
         # заполнене таблицы RowTableRole для ПРИМЕРА
@@ -140,10 +146,24 @@ class Creature_bd:
             name = "Ivan",
             lastName = "Shelkovski"
            )  
-        db.add_all(user1)
-        db.commit()
 
-        ord = RowTableOrder(
+        user2 = RowTableUser(
+            id_Telegram = randint(1_000_000, 10_000_000),
+            role = user,
+            name = "Boris",
+            lastName = "Shelk"
+           )
+        user3 = RowTableUser(
+            id_Telegram = randint(1_000_000, 10_000_000),
+            role = meneger,
+            name = "Gianni",
+            lastName = "White"
+           )    
+        db.add_all(user1, user2, user3)
+        db.commit()
+        
+        # заполнене таблицы RowTableOrder для ПРИМЕРА
+        ord1 = RowTableOrder(
             id_user=user1.id_Telegram,
             pickupPoint=place1,
             dateTime=14,
@@ -151,23 +171,34 @@ class Creature_bd:
             status='ready'
         )
 
-        row_1 = RowTableOrderProduct(
-            order=ord,
-            product=pr,
-            # id_order = 1,
-            # id_product = 2,
-            quantity = 10
+        ord2 = RowTableOrder(
+            id_user=user2.id_Telegram,
+            pickupPoint=place2,
+            dateTime=14,
+            typePay='cash',
+            status='ready'
         )
-        db.add(row_1)
+        db.add_all(ord1, ord2)
         db.commit()
+
+
+        # row_1 = RowTableOrderProduct(
+        #     order=ord1,
+        #     product=pr,
+        #     # id_order = 1,
+        #     # id_product = 2, 
+        #     quantity = 10
+        # )
+        # db.add(row_1)
+        # db.commit()
     
-        row_2 = RowTableOrderProduct(
-            # id_order = 2,
-            # id_product = 3,
-            quantity = 11
-        )
-        db.add(row_2)
-        db.commit()
+        # row_2 = RowTableOrderProduct(
+        #     # id_order = 2,
+        #     # id_product = 3,
+        #     quantity = 11
+        # )
+        # db.add(row_2)
+        # db.commit()
     
     
     
@@ -178,39 +209,55 @@ class Creature_bd:
 
 
 
-    # функция добавления строки в таблицу Products
-    # def row_add_products(productDictionary:dict)->RowTableProducts:
-    #     with Session(Creature_bd.bdEngine) as db:
-    #         row = RowTableProducts(
-    #             picture = productDictionary['picture'], 
-    #             product_name = productDictionary['product_name'], 
-    #             pickUp_point = productDictionary['pickUp_point'], 
-    #             price = productDictionary['price'], 
-    #             quantity = productDictionary['quantity'])
-    #         db.add(row)
-    #         db.commit()
 
-    # # функция добавления строки в таблицу Products
-    # def row_add_users(userDictionary:dict)->RowTableUsers:
-    #     with Session(Creature_bd.bdEngine) as db:
-    #         row = RowTableUsers(
-    #             first_name = userDictionary['first_name'], 
-    #             last_name = userDictionary['last_name'], 
-    #             mail = userDictionary['mail'], 
-    #             card_naumber = userDictionary['card_naumber']
-    #         )
-    #         db.add(row)
-    #         db.commit()
+# функция добавления строки в таблицу User
+    def row_add_users(userDictionary:dict)->RowTableUser:
+        with Session(Creature_bd.bdEngine) as db:
+            row = RowTableUser(
+                id_Telegram = userDictionary['id_Telegram'], 
+                role = userDictionary['role'], 
+                name = userDictionary['name'], 
+                lastName = userDictionary['lastName']
+            )
+            db.add(row)
+            db.commit()
 
-    # # выбор укзанной строки
-    # def singleSelect(id):
-    #     row = Creature_bd.db.get(RowTableProducts, id)
-    #     return row
+# функция добавления строки в таблицу Role
+    def row_add_role(userDictionary:dict)->RowTableRole:
+        with Session(Creature_bd.bdEngine) as db:
+            row = RowTableRole(
+                name = userDictionary['name']
+            )
+            db.add(row)
+            db.commit()
 
-# для проверки функции row_add_products
-# myDictionary = {'picture':"picture/Burger.png", 'product_name':"Sandvich", 'pickUp_point':'avenue', 'price':200, 'quantity':9}
-# Creature_bd.row_add_products(myDictionary)
+# функция добавления строки в таблицу PickupPoint
 
- # вывод значений полей БД
-# for el in Creature_bd.singleSelect(2):
-#     print(el.product_name, el.price)
+    def row_add_pick_up_point(userDictionary:dict)->RowTablePickupPoint:
+        with Session(Creature_bd.bdEngine) as db:
+            row = RowTablePickupPoint(
+                name = userDictionary['name'], 
+                coordinats = userDictionary["coordinats"]
+            )
+            db.add(row)
+            db.commit()
+
+# CRUD(Create, Read, Update, Delete) для таблици User
+    
+    def ReadUser(id)->dict:
+        with Session(Creature_bd.bdEngine) as db:
+            user = db.get(RowTableProduct, id)
+            userObj = {'id_Telegram':user.id_Telegram,
+            'role':user.role, 
+            'name':user.name, 
+            'lastName':user.lastName}
+        return userObj 
+    
+    def UpdateUser(id, Role, Name, lastName):
+        with Session(Creature_bd.bdEngine) as db:
+            user = db.get(RowTableProduct, id)
+            user.id_Telegram = user.id_Telegram
+            user.role = Role
+            user.RowTableProduct.name = Name
+            user.lastName = lastName
+        return user

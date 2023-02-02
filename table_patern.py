@@ -67,7 +67,7 @@ class RowTableUser(BaseClass):
     # зв'язок з RowTableRole
     role_parent = relationship("RowTableRole", back_populates="role_child")
     # зв'язок з RowTableOrder
-    order_user_child = relationship("RowTableOrder", back_populates="order_user_parent")
+    order_user_child = relationship("RowTableOrder", back_populates="order_user_parent", cascade="all, delete-orphan")
 
 
 class RowTableRole(BaseClass):    
@@ -75,7 +75,8 @@ class RowTableRole(BaseClass):
 
     id = Column(INTEGER, primary_key = True, autoincrement = True)
     name = Column(INTEGER)
-    role_child = relationship("RowTableUser", back_populates="role_parent")
+    role_child = relationship("RowTableUser", back_populates="role_parent", cascade="all, delete-orphan")
+
 class RowTablePickupPoint(BaseClass):
     __tablename__ = 'Pickup_points'    
 
@@ -83,4 +84,4 @@ class RowTablePickupPoint(BaseClass):
     name = Column(TEXT)
     coordinats = Column(FLOAT)
     # зв'язок з RowTableOrder
-    order_child = relationship("RowTableOrder", back_populates="order_parent")
+    order_child = relationship("RowTableOrder", back_populates="order_parent", cascade="all, delete-orphan")
