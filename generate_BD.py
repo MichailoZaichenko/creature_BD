@@ -136,36 +136,36 @@ class Creature_bd:
             name = "Meneger",
             role_child = []
            )  
-        db.add_all(user, admin, meneger)
+        db.add_all((user, admin, meneger))
         db.commit()
 
         # заполнене таблицы RowTableUser для ПРИМЕРА
         user1 = RowTableUser(
-            id_Telegram = randint(1_000_000, 10_000_000),
-            role = admin,
+            id_Telegram = 123,
+            role_parent = admin,
             name = "Ivan",
             lastName = "Shelkovski"
            )  
 
         user2 = RowTableUser(
-            id_Telegram = randint(1_000_000, 10_000_000),
-            role = user,
+            id_Telegram = 435,
+            role_parent = user,
             name = "Boris",
             lastName = "Shelk"
            )
         user3 = RowTableUser(
-            id_Telegram = randint(1_000_000, 10_000_000),
-            role = meneger,
+            id_Telegram = 678,
+            role_parent = meneger,
             name = "Gianni",
             lastName = "White"
            )    
-        db.add_all(user1, user2, user3)
+        db.add_all((user1, user2, user3))
         db.commit()
         
         # заполнене таблицы RowTableOrder для ПРИМЕРА
         ord1 = RowTableOrder(
             id_user=user1.id_Telegram,
-            pickupPoint=place1,
+            order_parent=place1,
             dateTime=14,
             typePay='cash',
             status='ready'
@@ -173,12 +173,12 @@ class Creature_bd:
 
         ord2 = RowTableOrder(
             id_user=user2.id_Telegram,
-            pickupPoint=place2,
+            order_parent=place2,
             dateTime=14,
             typePay='cash',
             status='ready'
         )
-        db.add_all(ord1, ord2)
+        db.add_all((ord1, ord2))
         db.commit()
 
 

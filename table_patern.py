@@ -17,17 +17,17 @@ class RowTableProduct(BaseClass):
 
     orders = relationship("RowTableOrderProduct", back_populates = "product")
 
-class RowTableOrder(BaseClass):
-    __tablename__ = 'Orders'
+# class RowTableOrder(BaseClass):
+#     __tablename__ = 'Orders'
 
-    id = Column(INTEGER, primary_key = True, autoincrement = True)
-    id_user = Column(INTEGER)
-    pickupPoint = Column(TEXT)
-    dateTime = Column(INTEGER)
-    typePay = Column(TEXT)
-    status = Column(TEXT)
+#     id = Column(INTEGER, primary_key = True, autoincrement = True)
+#     id_user = Column(INTEGER)
+#     pickupPoint = Column(TEXT)
+#     dateTime = Column(INTEGER)
+#     typePay = Column(TEXT)
+#     status = Column(TEXT)
 
-    products = relationship("RowTableOrderProduct", back_populates = "order")
+#     products = relationship("RowTableOrderProduct", back_populates = "order")
 
 class RowTableOrderProduct(BaseClass):
     __tablename__ = 'Orders-Products'
@@ -47,7 +47,7 @@ class RowTableOrder(BaseClass):
 
     id = Column(INTEGER, primary_key = True, autoincrement = True)
     id_user = Column(INTEGER, ForeignKey("Users.id_Telegram"))
-    pickupPoint = Column(TEXT, ForeignKey("Pickup_points.id"))
+    pickupPoint = Column(INTEGER, ForeignKey("Pickup_points.id"))
     dateTime = Column(INTEGER)
     typePay = Column(TEXT)
     status = Column(TEXT)
@@ -56,6 +56,7 @@ class RowTableOrder(BaseClass):
     # зв'язок з RowTableUser
     order_user_parent = relationship("RowTableUser", back_populates="order_user_child")
 
+    products = relationship("RowTableOrderProduct", back_populates = "order")
 
 class RowTableUser(BaseClass):
     __tablename__ = 'Users'
