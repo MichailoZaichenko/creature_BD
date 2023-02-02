@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship
 
 BaseClass = declarative_base()
 
-class RowTableProduct(BaseClass):
+class Product(BaseClass):
     __tablename__ = 'Products'
 
     id = Column(INTEGER, primary_key = True, autoincrement = True)
@@ -15,9 +15,9 @@ class RowTableProduct(BaseClass):
     price = Column(FLOAT)
     quantity = Column(INTEGER)
 
-    orders = relationship("RowTableOrderProduct", back_populates = "product")
+    orders = relationship("OrderProduct", back_populates = "product")
 
-# class RowTableOrder(BaseClass):
+# class Order(BaseClass):
 #     __tablename__ = 'Orders'
 
 #     id = Column(INTEGER, primary_key = True, autoincrement = True)
@@ -27,9 +27,9 @@ class RowTableProduct(BaseClass):
 #     typePay = Column(TEXT)
 #     status = Column(TEXT)
 
-#     products = relationship("RowTableOrderProduct", back_populates = "order")
+#     products = relationship("OrderProduct", back_populates = "order")
 
-class RowTableOrderProduct(BaseClass):
+class OrderProduct(BaseClass):
     __tablename__ = 'Orders-Products'
 
     id = Column(INTEGER, primary_key = True)
@@ -38,11 +38,11 @@ class RowTableOrderProduct(BaseClass):
     
     quantity = Column(INTEGER)
 
-    order = relationship("RowTableOrder", back_populates="products")
-    product = relationship("RowTableProduct", back_populates="orders")
+    order = relationship("Order", back_populates="products")
+    product = relationship("Product", back_populates="orders")
     
 
-class RowTableOrder(BaseClass):
+class Order(BaseClass):
     __tablename__ = 'Orders'
 
     id = Column(INTEGER, primary_key = True, autoincrement = True)
@@ -51,38 +51,38 @@ class RowTableOrder(BaseClass):
     dateTime = Column(INTEGER)
     typePay = Column(TEXT)
     status = Column(TEXT)
-    # зв'язок з RowTablePickupPoint
-    order_parent = relationship("RowTablePickupPoint", back_populates="order_child")
-    # зв'язок з RowTableUser
-    order_user_parent = relationship("RowTableUser", back_populates="order_user_child")
+    # зв'язок з PickupPoint
+    order_parent = relationship("PickupPoint", back_populates="order_child")
+    # зв'язок з User
+    order_user_parent = relationship("User", back_populates="order_user_child")
 
-    products = relationship("RowTableOrderProduct", back_populates = "order")
+    products = relationship("OrderProduct", back_populates = "order")
 
-class RowTableUser(BaseClass):
+class User(BaseClass):
     __tablename__ = 'Users'
 
     id_Telegram = Column(INTEGER, primary_key = True)
     role = Column(TEXT, ForeignKey("Roles.id"))
     name = Column(TEXT)
     lastName = Column(TEXT)
-    # зв'язок з RowTableRole
-    role_parent = relationship("RowTableRole", back_populates="role_child")
-    # зв'язок з RowTableOrder
-    order_user_child = relationship("RowTableOrder", back_populates="order_user_parent", cascade="all, delete-orphan")
+    # зв'язок з Role
+    role_parent = relationship("Role", back_populates="role_child")
+    # зв'язок з Order
+    order_user_child = relationship("Order", back_populates="order_user_parent", cascade="all, delete-orphan")
 
 
-class RowTableRole(BaseClass):    
+class Role(BaseClass):    
     __tablename__ = 'Roles'
 
     id = Column(INTEGER, primary_key = True, autoincrement = True)
     name = Column(INTEGER)
-    role_child = relationship("RowTableUser", back_populates="role_parent", cascade="all, delete-orphan")
+    role_child = relationship("User", back_populates="role_parent", cascade="all, delete-orphan")
 
-class RowTablePickupPoint(BaseClass):
+class PickupPoint(BaseClass):
     __tablename__ = 'Pickup_points'    
 
     id  = Column(INTEGER, primary_key = True, autoincrement = True)
     name = Column(TEXT)
     coordinats = Column(FLOAT)
-    # зв'язок з RowTableOrder
-    order_child = relationship("RowTableOrder", back_populates="order_parent", cascade="all, delete-orphan")
+    # зв'язок з Order
+    order_child = relationship("Order", back_populates="order_parent", cascade="all, delete-orphan")
