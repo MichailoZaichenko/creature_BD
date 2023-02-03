@@ -62,7 +62,7 @@ class User(BaseClass):
     __tablename__ = 'Users'
 
     id_Telegram = Column(INTEGER, primary_key = True, unique=True)
-    id_role = Column(INTEGER, ForeignKey("Roles.id"))
+    role = Column(TEXT, ForeignKey("Roles.id"))
     name = Column(TEXT)
     lastName = Column(TEXT)
     # зв'язок з Role

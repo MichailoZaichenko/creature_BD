@@ -126,16 +126,13 @@ class Creature_bd:
 
         # заполнене таблицы Role для ПРИМЕРА
         user = Role(
-            name = "User",
-            user_role_child = []
+            name = "User"
            )    
         admin = Role(
-            name = "Admin",
-            user_role_child = []
+            name = "Admin"
            ) 
         meneger = Role(
-            name = "Meneger",
-            user_role_child = []
+            name = "Meneger"
            )  
         db.add_all((user, admin, meneger))
         db.commit()
@@ -143,20 +140,20 @@ class Creature_bd:
         # заполнене таблицы User для ПРИМЕРА
         user1 = User(
             id_Telegram = 123,
-            role_parent = admin,
+            role = admin.name,
             name = "Ivan",
             lastName = "Shelkovski"
            )  
 
         user2 = User(
             id_Telegram = 435,
-            role_parent = user,
+            role = user.name,
             name = "Boris",
             lastName = "Shelk"
            )
         user3 = User(
             id_Telegram = 678,
-            role_parent = meneger,
+            role = meneger.name,
             name = "Gianni",
             lastName = "White"
            )    
@@ -166,7 +163,7 @@ class Creature_bd:
         # заполнене таблицы Order для ПРИМЕРА
         ord1 = Order(
             id_user=user1.id_Telegram,
-            pick_up_point_order_parent=place1,
+            pickupPoint=place1.name,
             dateTime=14,
             typePay='cash',
             status='ready'
@@ -174,7 +171,7 @@ class Creature_bd:
 
         ord2 = Order(
             id_user=user2.id_Telegram,
-            pick_up_point_order_parent=place2,
+            pickupPoint=place2.name,
             dateTime=14,
             typePay='cash',
             status='ready'
@@ -213,7 +210,7 @@ class Creature_bd:
         with Session(Creature_bd.bdEngine) as db:
             row = Order(
                 id_user = orderDictionary['id_user'],
-                pick_up_point_order_parent = orderDictionary['pick_up_point_order_parent'],
+                pickupPoint = orderDictionary['pickupPoint'],
                 dateTime = orderDictionary['dateTime'],
                 typePay = orderDictionary['typePay'],
                 status = orderDictionary['status']
@@ -226,7 +223,7 @@ class Creature_bd:
         with Session(Creature_bd.bdEngine) as db:
             row = User(
                 id_Telegram = userDictionary['id_Telegram'], 
-                role_parent = userDictionary['role_parent'], 
+                role = userDictionary['role'], 
                 name = userDictionary['name'], 
                 lastName = userDictionary['lastName']
             )
@@ -260,7 +257,7 @@ class Creature_bd:
         with Session(Creature_bd.bdEngine) as db:
             listTable = []
             for el in db.query(Order).all():
-                 listTable.append((el.id, el.id_user, el.pick_up_point_order_parent, el.dateTime, el.typePay, el.status))
+                 listTable.append((el.id, el.id_user, el.pickupPoint, el.dateTime, el.typePay, el.status))
         return listTable
 
 # Чтение всех строк таблици User, возвращает список с вложенными кортежами
@@ -268,7 +265,7 @@ class Creature_bd:
         with Session(Creature_bd.bdEngine) as db:
             listTable = []
             for el in db.query(User).all():
-                listTable.append((el.id_Telegram, el.role_parent, el.name, el.lastName))
+                listTable.append((el.id_Telegram, el.role, el.name, el.lastName))
         return listTable
 
 # Чтение всех строк таблици Role, возвращает список с вложенными кортежами
@@ -293,7 +290,7 @@ class Creature_bd:
     def selectOrder(id)->dict:
         with Session(Creature_bd.bdEngine) as db:
             row = db.get(Order, id)
-            rowProoduct = {'id_user':row.id_user, 'pickupPoint':row.pick_up_point_order_parent, 'dateTime':row.dateTime, 'typePay':row.typePay, 'status':row.status}
+            rowProoduct = {'id_user':row.id_user, 'pickupPoint':row.pickupPoint, 'dateTime':row.dateTime, 'typePay':row.typePay, 'status':row.status}
         return rowProoduct 
 
 # функция выбор укзанной строки таблицы User по primay_key
@@ -336,7 +333,7 @@ class Creature_bd:
                     db.commit()
                     db.refresh(singleSelect)
                 case 'pickupPoint':
-                    singleSelect.pick_up_point_order_parent = value
+                    singleSelect.pickupPoint = value
                     db.commit()
                     db.refresh(singleSelect)
                 case 'dateTime':
@@ -444,11 +441,16 @@ class Creature_bd:
             db.commit()
 
 
+# Вивод Количество всех пользователей
+    def Num_of_users():
+        pass
+
+
 
 # ПРОВЕРКА ФУНКЦИЙ
 
-# usertDictionary = {'id_Telegram':21345, 'id_role': 1, 'name':"Micha", "lastName":"Zaichenko"}
-# Creature_bd.add_users(productDictionary)
+userDictionary = {'id_Telegram':21345, 'role': "admin", 'name':"Micha", "lastName":"Zaichenko"}
+Creature_bd.add_users(userDictionary)
 
 # roleDictionary = {'name':"premium_user"}
 # Creature_bd.add_role(roleDictionary)
