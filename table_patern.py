@@ -52,23 +52,23 @@ class Order(BaseClass):
     typePay = Column(TEXT)
     status = Column(TEXT)
     # зв'язок з PickupPoint
-    order_parent = relationship("PickupPoint", back_populates="order_child")
+    pick_up_point_order_parent = relationship("PickupPoint", back_populates="order_pick_up_point_child")
     # зв'язок з User
-    order_user_parent = relationship("User", back_populates="order_user_child")
+    user_parent = relationship("User", back_populates="order_user_child")
 
     products = relationship("OrderProduct", back_populates = "order")
 
 class User(BaseClass):
     __tablename__ = 'Users'
 
-    id_Telegram = Column(INTEGER, primary_key = True)
-    role = Column(TEXT, ForeignKey("Roles.id"))
+    id_Telegram = Column(INTEGER, primary_key = True, unique=True)
+    id_role = Column(INTEGER, ForeignKey("Roles.id"))
     name = Column(TEXT)
     lastName = Column(TEXT)
     # зв'язок з Role
-    role_parent = relationship("Role", back_populates="role_child")
+    role_parent = relationship("Role", back_populates="user_role_child")
     # зв'язок з Order
-    order_user_child = relationship("Order", back_populates="order_user_parent", cascade="all, delete-orphan")
+    order_user_child = relationship("Order", back_populates="user_parent", cascade="all, delete-orphan")
 
 
 class Role(BaseClass):    
@@ -76,13 +76,13 @@ class Role(BaseClass):
 
     id = Column(INTEGER, primary_key = True, autoincrement = True)
     name = Column(INTEGER)
-    role_child = relationship("User", back_populates="role_parent", cascade="all, delete-orphan")
+    user_role_child = relationship("User", back_populates="role_parent", cascade="all, delete-orphan")
 
 class PickupPoint(BaseClass):
     __tablename__ = 'Pickup_points'    
 
     id  = Column(INTEGER, primary_key = True, autoincrement = True)
     name = Column(TEXT)
-    coordinats = Column(FLOAT)
+    coordinats = Column(TEXT)
     # зв'язок з Order
-    order_child = relationship("Order", back_populates="order_parent", cascade="all, delete-orphan")
+    order_pick_up_point_child = relationship("Order", back_populates="pick_up_point_order_parent", cascade="all, delete-orphan")

@@ -1,0 +1,1 @@
+nameBD = "sqlite:///bot_BD.db"
