@@ -17,17 +17,17 @@ class Product(BaseClass):
 
     orders = relationship("OrderProduct", back_populates = "product")
 
-# class Order(BaseClass):
-#     __tablename__ = 'Orders'
+class Order(BaseClass):
+    __tablename__ = 'Orders'
 
-#     id = Column(INTEGER, primary_key = True, autoincrement = True)
-#     id_user = Column(INTEGER)
-#     pickupPoint = Column(TEXT)
-#     dateTime = Column(INTEGER)
-#     typePay = Column(TEXT)
-#     status = Column(TEXT)
+    id = Column(INTEGER, primary_key = True, autoincrement = True)
+    id_user = Column(INTEGER)
+    pickupPoint = Column(TEXT)
+    dateTime = Column(INTEGER)
+    typePay = Column(TEXT)
+    status = Column(TEXT)
 
-#     products = relationship("OrderProduct", back_populates = "order")
+    products = relationship("OrderProduct", back_populates = "order")
 
 class OrderProduct(BaseClass):
     __tablename__ = 'Orders-Products'
@@ -62,7 +62,7 @@ class User(BaseClass):
     __tablename__ = 'Users'
 
     id_Telegram = Column(INTEGER, primary_key = True, unique=True)
-    role = Column(TEXT, ForeignKey("Roles.id"))
+    role = Column(INTEGER, ForeignKey("Roles.id"), default=1)
     name = Column(TEXT)
     lastName = Column(TEXT)
     # зв'язок з Role

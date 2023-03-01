@@ -443,8 +443,9 @@ class Creature_bd:
 
 # Вивод Количество всех пользователей
     def Num_of_users():
-        pass
-
+        allUsers = Creature_bd.allUser()
+        return len(allUsers)
+print(f"Количество пользователей: {Creature_bd.Num_of_users()}")
 
 
 # ПРОВЕРКА ФУНКЦИЙ
